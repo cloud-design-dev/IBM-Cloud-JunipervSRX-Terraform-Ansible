@@ -1,0 +1,14 @@
+---
+- hosts: vsrxlab
+  vars:
+    ansible_command_timeout: 120
+  gather_facts: no
+  tasks:
+    - name: collect default set of facts and configuration
+      junipernetworks.junos.junos_facts:
+        gather_subset: config
+      when: ansible_network_os == 'junipernetworks.junos.junos'
+      register: junos_facts
+    - name: show device facts
+      debug:        
+        var: junos_facts
