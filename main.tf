@@ -1,12 +1,12 @@
 resource "ibm_network_vlan" "vsrx_public" {
-  name       = "${var.project_name}-public-vlan"
+  name       = "${var.project_name}-public"
   datacenter = var.datacenter
   type       = "PUBLIC"
   tags       = ["owner:ryantiffany", "datacenter:${var.datacenter}"]
 }
 
 resource "ibm_network_vlan" "vsrx_private" {
-  name            = "${var.project_name}-private-vlan"
+  name            = "${var.project_name}-private"
   datacenter      = var.datacenter
   type            = "PRIVATE"
   router_hostname = replace(ibm_network_vlan.vsrx_public.router_hostname, "/^f/", "b")
@@ -33,7 +33,7 @@ resource "ibm_network_gateway" "vsrxlab" {
     public_vlan_id       = ibm_network_vlan.vsrx_public.id
     private_vlan_id      = ibm_network_vlan.vsrx_private.id
     tags                 = ["owner:ryantiffany", "datacenter:${var.datacenter}"]
-    notes                = "testing the deployment of an srx via terraform"
+    notes                = "vSRX testing boxes for Ansible automation"
     ipv6_enabled         = true
     ssh_key_ids          = [data.ibm_compute_ssh_key.deploymentKey.id]
   }
@@ -54,7 +54,7 @@ resource "ibm_network_gateway" "vsrxlab" {
     public_vlan_id       = ibm_network_vlan.vsrx_public.id
     private_vlan_id      = ibm_network_vlan.vsrx_private.id
     tags                 = ["owner:ryantiffany", "datacenter:${var.datacenter}"]
-    notes                = "testing the deployment of an srx via terraform"
+    notes                = "vSRX testing boxes for Ansible automation"
     ipv6_enabled         = true
     ssh_key_ids          = [data.ibm_compute_ssh_key.deploymentKey.id]
   }
