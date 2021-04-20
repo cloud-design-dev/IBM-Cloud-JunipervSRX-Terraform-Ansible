@@ -1,14 +1,6 @@
-## Inputs
+# Overview
+This Repository contains 3 options for using Terraform and Ansible to deploy and configure a [Juniper vSRX]() network gateway on the IBM Cloud. 
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| iaas\_classic\_username | The IBM Cloud Classic Infrastructure Username. | `string` | n/a | yes |
-| iaas\_classic\_api\_key | The IBM Cloud Classic Infrastructure API key. | `string` | n/a | yes |
-| datacenter | The datacenter where the vSRX Gatewally Appliance is deployed. | `string` | n/a | yes |
-| project\_name | Name of the vSRX Gateway Appliance. | `string` | n/a | yes |
-| network\_speed | description | `string` | `10000` | yes |
-| ssh\_key\_ids | List of SSH key IDs to inject into vsrx host | `list(string)` | n/a | no |
-| tags | List of tags to add on all created resources | `list(string)` | `[]` | no |
-| private\_network\_only | description | `bool` | `false` | no |
-
-## Outputs
+ - [Standalone 1G vSRX](standalone/README.md) : This deploys a single vSRX instance with 1G Networking interfaces. 
+ - [HA-Pair 1G vSRX](ha-pair/README.md) : This deploys 2 vSRX instances with 1G interfaces and sets them up in an HA Pair
+ - [HA-Pair 10G vSRX](ha-pair/README.md) : This deploys 2 vSRX instances with 10G interfaces and sets them up in an HA Pair.
