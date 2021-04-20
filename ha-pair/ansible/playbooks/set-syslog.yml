@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars:
+    ansible_command_timeout: 120
+    syslog_instance_ip: 10.87.129.16
+    vsrx_private_ip: 10.136.164.214
+  gather_facts: no
+  tasks:
+    - name: Set system syslog server  
+      junos_config:
+        lines:
+          - set system syslog user * any emergency
+          - set system syslog host {{ syslog_instance_ip }} any any
+          - set system syslog host {{ syslog_instance_ip }} match RT_FLOW_SESSION
+          - set system syslog file messages any any
+          - set system syslog file messages authorization info
+          - set system syslog file interactive-commands interactive-commands any
+    - name: Set system stream logs for syslog server  
+      junos_config:
+        lines:
+          - set security log mode stream
+          - set security log source-address {{ vsrx_private_ip }}
+          - set security log stream S1 format syslog
+          - set security log stream S1 category all
+          - set security log stream S1 host {{ syslog_instance_ip }}

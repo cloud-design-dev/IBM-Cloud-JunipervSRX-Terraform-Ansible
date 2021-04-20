@@ -1,0 +1,22 @@
+---
+- hosts: all
+  vars:
+    ansible_command_timeout: 120
+  gather_facts: no
+  tasks:
+    - name: Configure the new interfaces for routed vlans 
+      junos_config:
+        lines:
+          - set interfaces reth2 vlan-tagging
+          - set interfaces reth2 redundant-ether-options redundancy-group 1
+          - set interfaces reth2 unit {{ private_vlan }} vlan-id {{ private_vlan }}
+          - set interfaces reth2 unit {{ private_vlan }} family inet address {{ private_subnet_gw_cidr }}
+          - set security zones security-zone CUSTOMER-PRIVATE interfaces reth2.{{ private_vlan }} host-inbound-traffic system-services all
+          - set security address-book global address VSI-PRI-NET {{ private_subnet_cidr }}
+          - set interfaces reth3 vlan-tagging
+          - set interfaces reth3 redundant-ether-options redundancy-group 1
+          - set interfaces reth3 unit {{ public_vlan }} vlan-id {{ public_vlan }}
+          - set interfaces reth3 unit {{ public_vlan }} family inet address {{ public_subnet_gw_cidr }}
+          - set security zones security-zone CUSTOMER-PUBLIC interfaces reth3.{{ public_vlan }} host-inbound-traffic system-services all
+          - set security address-book global address VSI-PUB-NET {{ public_subnet_cidr }}
+        comment: update config

@@ -33,3 +33,5 @@ variable "hostname" {
   type        = string
   default     = ""
 }
+
+variable "network_speed" {}
