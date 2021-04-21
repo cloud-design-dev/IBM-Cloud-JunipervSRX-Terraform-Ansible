@@ -67,3 +67,15 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 | associated\_vlans | A nested block describing the associated VLANs for the member of the network gateway |
 
 [Full List of Network Gateway Outputs](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/network_gateway#attribute-reference)
+
+## Configure Gateways via Ansible
+
+1. Install the Junos Ansible Collection
+This [collection](https://galaxy.ansible.com/junipernetworks/junos) provides ansible modules for interacting with Junos. 
+```sh 
+ansible-galaxy collection install junipernetworks.junos
+```
+1. Run interface configuration playbook
+   ```sh
+   ansible-playbook -i ../ansible/inventory ../ansible/playbooks/set-interface-ha.yml
+   ```
