@@ -76,7 +76,8 @@ This [collection](https://galaxy.ansible.com/junipernetworks/junos) provides ans
 ansible-galaxy collection install junipernetworks.junos
 ```
 1. Run interface configuration playbook
-This playbook will:
+This playbook will:  
+
  - Assigns associated VLANs and subnet to CUSTOMER-PUBLIC and CUSTOMER-PRIVATE interfaces
  - Creates security zone for CUSTOMER-PUBLIC and CUSTOMER-PRIVATE traffic that allows all system services traffic 
  - Adds CUSTOMER-PUBLIC and CUSTOMER-PRIVATE subnets to the vSRX global address book
@@ -86,7 +87,8 @@ This playbook will:
    ```
    
 1. Run security policy playbook
-This playbook will:
+
+This playbook will:  
  - Allow all traffic within CUSTOMER_PUBLIC zone
  - Allow ping and SSH from the internet to the public subnet
  - Allow all outbound traffic from CUSTOMER-PUBLIC to the internet
