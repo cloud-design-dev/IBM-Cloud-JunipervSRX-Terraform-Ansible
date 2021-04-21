@@ -34,6 +34,22 @@ resource "ibm_network_vlan" "vsrx_private" {
   tags            = ["datacenter:${var.datacenter}"]
 }
 
+resource "ibm_compute_vm_instance" "node" {
+  hostname             = "${var.hostname}-test-instance"
+  domain               = var.domain
+  os_reference_code    = var.os_image
+  datacenter           = var.datacenter
+  network_speed        = 1000
+  hourly_billing       = true
+  private_network_only = false
+  local_disk           = true
+  flavor_key_name      = var.flavor
+  public_vlan_id       = ibm_network_vlan.vsrx_public.id
+  private_vlan_id      = ibm_network_vlan.vsrx_private.id
+  tags                 = ["datacenter:${var.datacenter}"]
+  ssh_key_ids          = local.ssh_key_ids
+}
+
 resource "ibm_network_gateway" "gateway" {
   name = var.hostname
 
@@ -61,5 +77,11 @@ resource "ibm_network_gateway" "gateway" {
 }
 
 module "ansible" {
-  source = "./ansible"
+  depends_on     = [ibm_compute_vm_instance.node]
+  source         = "./ansible"
+  hostname       = var.hostname
+  private_subnet = ibm_compute_vm_instance.node.private_subnet
+  public_subnet  = ibm_compute_vm_instance.node.public_subnet
+  public_vlan    = ibm_network_vlan.vsrx_public.vlan_number
+  private_vlan   = ibm_network_vlan.vsrx_private.vlan_number
 }

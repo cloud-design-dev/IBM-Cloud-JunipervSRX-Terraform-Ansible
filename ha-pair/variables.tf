@@ -39,7 +39,3 @@ variable "ssh_key" {
   type        = string
   default     = ""
 }
-
-variable "project_name" {
-  default = ""
-}
