@@ -70,13 +70,13 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 
 ## Configure Gateways via Ansible
 
-1. Install the Junos Ansible Collection
+### Install the Junos Ansible Collection
 This [collection](https://galaxy.ansible.com/junipernetworks/junos) provides ansible modules for interacting with Junos. 
 
    ```sh 
    ansible-galaxy collection install junipernetworks.junos
    ```
-1. Run interface configuration playbook
+### Run interface configuration playbook
 
 **This playbook will:**
  - Assign associated VLANs and subnet to CUSTOMER-PUBLIC and CUSTOMER-PRIVATE interfaces
@@ -86,7 +86,8 @@ This [collection](https://galaxy.ansible.com/junipernetworks/junos) provides ans
    ```sh
    ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/set-interface-ha.yml
    ```
-1. Run security policy playbook
+   
+### Run security policy playbook
 
 **This playbook will:** 
  - Allow all traffic within CUSTOMER_PUBLIC zone
