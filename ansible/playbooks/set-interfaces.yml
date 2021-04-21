@@ -1,7 +1,7 @@
 ---
 - hosts: all
   vars_files:
-    deployment_vars.yml
+     - ../playbook_vars/deployment_vars.yml
   gather_facts: no
   tasks:
     - name: Assign associated VLANs and subnet to CUSTOMER-PUBLIC interface

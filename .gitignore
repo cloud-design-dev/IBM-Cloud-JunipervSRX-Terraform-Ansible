@@ -1,7 +1,7 @@
 # Local .terraform directories
 **/.terraform/*
 **/test-scripts/*
-**/ansible/playbooks/backup/*
+**/ansible/playbook_vars/*
 # .tfstate files
 *.tfstate
 *.tfstate.*

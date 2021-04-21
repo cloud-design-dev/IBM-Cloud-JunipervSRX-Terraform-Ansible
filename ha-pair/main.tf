@@ -65,12 +65,12 @@ resource "ibm_network_gateway" "gateway" {
     hostname             = "${var.hostname}-gw1"
     domain               = var.domain
     datacenter           = var.datacenter
-    network_speed        = local.network_speed
+    network_speed        = local.oneGconfig.network_speed
     private_network_only = false
     tcp_monitoring       = false
-    package_key_name     = local.package
-    process_key_name     = local.process_key
-    os_key_name          = local.os_version
+    package_key_name     = local.oneGconfig.package
+    process_key_name     = local.oneGconfig.process_key
+    os_key_name          = local.oneGconfig.os_version
     redundant_network    = true
     disk_key_names       = ["HARD_DRIVE_2_00_TB_SATA_2"]
     public_bandwidth     = 20000
@@ -86,12 +86,12 @@ resource "ibm_network_gateway" "gateway" {
     hostname             = "${var.hostname}-gw2"
     domain               = var.domain
     datacenter           = var.datacenter
-    network_speed        = local.network_speed
+    network_speed        = local.oneGconfig.network_speed
     private_network_only = false
     tcp_monitoring       = false
-    package_key_name     = local.package
-    process_key_name     = local.process_key
-    os_key_name          = local.os_version
+    package_key_name     = local.oneGconfig.package
+    process_key_name     = local.oneGconfig.process_key
+    os_key_name          = local.oneGconfig.os_version
     redundant_network    = true
     disk_key_names       = ["HARD_DRIVE_2_00_TB_SATA_2"]
     public_bandwidth     = 20000
@@ -105,7 +105,7 @@ resource "ibm_network_gateway" "gateway" {
 
 module "ansible" {
   depends_on     = [ibm_compute_vm_instance.node]
-  source         = "./ansible"
+  source         = "../ansible"
   hostname       = var.hostname
   private_subnet = ibm_compute_vm_instance.node.private_subnet
   public_subnet  = ibm_compute_vm_instance.node.public_subnet

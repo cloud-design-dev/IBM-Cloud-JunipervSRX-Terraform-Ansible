@@ -1,5 +1,8 @@
 # Overview
-This guide will show you how to use Terraform and Ansible to deploy and configure a [Juniper vSRX]() network gateway on the IBM Cloud. 
+This guide will show you how to use Terraform and Ansible to deploy and configure a [Juniper vSRX](https://cloud.ibm.com/docs/vsrx?topic=vsrx-about-ibm-cloud-juniper-vsrx) network gateway on the IBM Cloud. This code allows two deployment types:
+
+ - oneGconfig: This deploys a vSRX with a 1G network interface
+ - tenGconfig: This deploys a vSRX with a 10G network interface
 
 ## Deploy all resources
 
@@ -17,7 +20,13 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
    | ssh_key | Name of an existing SSH key to inject in to the vSRX | N |
    | hostname | Hostname for the vSRX Cluster | N | 
    | domain | Domain name for the vSRX Cluster | N | 
-
+1. Update `main.tf` for your environment:
+   ```sh
+   | Environment | network_speed | package_key_name | process_key_name | os_key_name | 
+   | ---- | ----------- | ---| ---| ---|
+   | oneGconfig | local.oneGconfig.network_speed | local.oneGconfig.package | local.oneGconfig.process_key | local.oneGconfig.os_version |
+   | tenGconfig | local.tenGconfig.network_speed | local.tenGconfig.package | local.tenGconfig.process_key | local.tenGconfig.os_version |
+   ```
 1. Plan deployment:
    ```sh
    terraform init
@@ -45,6 +54,8 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 | tcp\_monitoring | description | `bool` | `false` | no |
 | redundant\_network | description | `bool` | `false` | no |
 
+[Full List of Network Gateway Inputs](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/network_gateway#argument-reference)
+
 ## Outputs
 | Name | Description | 
 |------|-------------|
@@ -54,3 +65,5 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 | public\_vlan\_id | The public VLAN ID for the network gateway. |
 | private\_vlan\_id | The private VLAN ID of the network gateway. |
 | associated\_vlans | A nested block describing the associated VLANs for the member of the network gateway |
+
+[Full List of Network Gateway Outputs](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/network_gateway#attribute-reference)

@@ -34,4 +34,14 @@ variable "hostname" {
   default     = ""
 }
 
-variable "network_speed" {}
+variable "os_image" {
+  description = "Default operating system image for compute instance."
+  type        = string
+  default     = "UBUNTU_18_64"
+}
+
+variable "flavor" {
+  description = "Default instance size."
+  type        = string
+  default     = "BL2_2X4X100"
+}
