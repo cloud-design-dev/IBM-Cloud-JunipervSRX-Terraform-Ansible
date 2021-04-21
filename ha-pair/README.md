@@ -72,12 +72,12 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 
 1. Install the Junos Ansible Collection
 This [collection](https://galaxy.ansible.com/junipernetworks/junos) provides ansible modules for interacting with Junos. 
-```sh 
-ansible-galaxy collection install junipernetworks.junos
-```
-1. Run interface configuration playbook
-This playbook will:  
 
+   ```sh 
+   ansible-galaxy collection install junipernetworks.junos
+   ```
+1. Run interface configuration playbook
+### This playbook does the following:
  - Assigns associated VLANs and subnet to CUSTOMER-PUBLIC and CUSTOMER-PRIVATE interfaces
  - Creates security zone for CUSTOMER-PUBLIC and CUSTOMER-PRIVATE traffic that allows all system services traffic 
  - Adds CUSTOMER-PUBLIC and CUSTOMER-PRIVATE subnets to the vSRX global address book
