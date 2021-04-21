@@ -3,6 +3,7 @@
 **/test-scripts/*
 **/ansible/playbook_vars/*
 **/ansible/config_backups/*
+**/ansible/inventory.ini
 # .tfstate files
 *.tfstate
 *.tfstate.*
