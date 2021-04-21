@@ -7,25 +7,23 @@
     - name: Assign associated VLANs and subnet to CUSTOMER-PUBLIC interface
       junos_config:
         lines:
-          - set interfaces reth3 vlan-tagging
-          - set interfaces reth3 redundant-ether-options redundancy-group 1
-          - set interfaces reth3 unit {{ public_vlan }} vlan-id {{ public_vlan }}
-          - set interfaces reth3 unit {{ public_vlan }} family inet address {{ public_subnet_gw_cidr }}
+          - set interfaces ae1 flexible-vlan-tagging
+          - set interfaces ae1 unit {{ public_vlan }} vlan-id {{ public_vlan }}
+          - set interfaces ae1 unit {{ public_vlan }} family inet address {{ public_subnet_gw_cidr }}
     - name: Assign associated VLANs and subnet to CUSTOMER-PRIVATE interface  
       junos_config:
         lines:
-          - set interfaces reth2 vlan-tagging
-          - set interfaces reth2 redundant-ether-options redundancy-group 1
-          - set interfaces reth2 unit {{ private_vlan }} vlan-id {{ private_vlan }}
-          - set interfaces reth2 unit {{ private_vlan }} family inet address {{ private_subnet_gw_cidr }}
+          - set interfaces ae0 flexible-vlan-tagging
+          - set interfaces ae0 unit {{ private_vlan }} vlan-id {{ private_vlan }}
+          - set interfaces ae0 unit {{ private_vlan }} family inet address {{ private_subnet_gw_cidr }}
     - name: Create security zone for CUSTOMER-PUBLIC traffic that allows all system services traffic 
       junos_config:
         lines:
-          - set security zones security-zone CUSTOMER-PUBLIC interfaces reth3.{{ public_vlan }} host-inbound-traffic system-services all
+          - set security zones security-zone CUSTOMER-PUBLIC interfaces ae1.{{ public_vlan }} host-inbound-traffic system-services all
     - name: Create security zone for CUSTOMER-PRIVATE traffic that allows all system services traffic 
       junos_config:
         lines:
-          - set security zones security-zone CUSTOMER-PRIVATE interfaces reth2.{{ private_vlan }} host-inbound-traffic system-services all
+          - set security zones security-zone CUSTOMER-PRIVATE interfaces ae0.{{ private_vlan }} host-inbound-traffic system-services all
     - name: Add CUSTOMER-PUBLIC and CUSTOMER-PRIVATE subnets to the vSRX global address book 
       junos_config:
         lines:

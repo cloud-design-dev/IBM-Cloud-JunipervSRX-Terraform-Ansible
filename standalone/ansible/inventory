@@ -1,0 +1,7 @@
+[junos]
+standalone-vsrx ansible_host=159.8.247.227 ansible_user=root
+
+[junos:vars]
+ansible_connection=ansible.netcommon.netconf
+ansible_network_os=junipernetworks.junos.junos
+ansible_port=22

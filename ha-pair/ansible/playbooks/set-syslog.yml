@@ -1,9 +1,7 @@
 ---
 - hosts: all
-  vars:
-    ansible_command_timeout: 120
-    syslog_instance_ip: 10.87.129.16
-    vsrx_private_ip: 10.136.164.214
+  vars_files:
+    deployment_vars.yml
   gather_facts: no
   tasks:
     - name: Set system syslog server  
