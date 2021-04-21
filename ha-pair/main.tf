@@ -10,13 +10,21 @@ resource ibm_compute_ssh_key generated_key {
 }
 
 locals {
-  hostname      = var.hostname != "" ? var.hostname : "vsrx"
-  domain        = var.domain != "" ? var.domain : "example.com"
-  network_speed = var.network_speed == "10000" ? var.network_speed : "1000"
-  package       = var.network_speed == "10000" ? "VIRTUAL_ROUTER_APPLIANCE_10_GPBS" : "VIRTUAL_ROUTER_APPLIANCE_1_GPBS"
-  os_version    = var.network_speed == "10000" ? "OS_JUNIPER_VSRX_19_4_UP_TO_10GBPS_STANDARD_SRIOV" : "OS_JUNIPER_VSRX_19_4_UP_TO_1GBPS_STANDARD_SRIOV"
-  process_key   = var.network_speed == "10000" ? "INTEL_INTEL_XEON_5120_2_20" : "INTEL_XEON_4210_2_20"
-  ssh_key_ids   = var.ssh_key != "" ? [data.ibm_compute_ssh_key.deploymentKey[0].id, ibm_compute_ssh_key.generated_key.id] : [ibm_compute_ssh_key.generated_key.id]
+  oneGconfig = {
+    package       = "VIRTUAL_ROUTER_APPLIANCE_1_GPBS"
+    os_version    = "OS_JUNIPER_VSRX_19_4_UP_TO_1GBPS_STANDARD_SRIOV"
+    process_key   = "INTEL_XEON_4210_2_20"
+    network_speed = "1000"
+  }
+  tenGconfig = {
+    package       = "VIRTUAL_ROUTER_APPLIANCE_10_GPBS"
+    os_version    = "OS_JUNIPER_VSRX_19_4_UP_TO_10GBPS_STANDARD_SRIOV"
+    process_key   = "INTEL_INTEL_XEON_5120_2_20"
+    network_speed = "10000"
+  }
+  hostname    = var.hostname != "" ? var.hostname : "vsrx"
+  domain      = var.domain != "" ? var.domain : "example.com"
+  ssh_key_ids = var.ssh_key != "" ? [data.ibm_compute_ssh_key.deploymentKey[0].id, ibm_compute_ssh_key.generated_key.id] : [ibm_compute_ssh_key.generated_key.id]
 }
 
 resource "ibm_network_vlan" "vsrx_public" {
