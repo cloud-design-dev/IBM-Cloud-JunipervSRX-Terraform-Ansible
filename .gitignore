@@ -2,6 +2,7 @@
 **/.terraform/*
 **/test-scripts/*
 **/ansible/playbook_vars/*
+**/ansible/config_backups/*
 # .tfstate files
 *.tfstate
 *.tfstate.*

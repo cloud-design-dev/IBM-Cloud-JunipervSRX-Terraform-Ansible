@@ -33,3 +33,6 @@
           - set security address-book global address VSI-PRI-NET {{ private_subnet_cidr }}
         comment: update config
         backup: yes
+        backup_options:
+          dir_path: '../config_backups'
+          filename: ha-config.backup
