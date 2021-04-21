@@ -23,7 +23,7 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 1. Update `main.tf` for your environment:
    ```sh
    | Environment | network_speed | package_key_name | process_key_name | os_key_name | 
-   | ---- | ----------- | ---| ---| ---|
+   | ----------- | ----------- | ----------- | ----------- | ----------- |
    | oneGconfig | local.oneGconfig.network_speed | local.oneGconfig.package | local.oneGconfig.process_key | local.oneGconfig.os_version |
    | tenGconfig | local.tenGconfig.network_speed | local.tenGconfig.package | local.tenGconfig.process_key | local.tenGconfig.os_version |
    ```
