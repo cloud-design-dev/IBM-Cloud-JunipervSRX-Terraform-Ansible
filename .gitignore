@@ -1,6 +1,6 @@
 # Local .terraform directories
 **/.terraform/*
-**/test-scripts/*
+**/data-import/*
 **/ansible/playbook_vars/*
 **/ansible/config_backups/*
 **/ansible/inventory.ini
