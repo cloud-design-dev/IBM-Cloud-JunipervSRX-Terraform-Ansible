@@ -87,6 +87,8 @@ ansible-galaxy collection install junipernetworks.junos
 ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/set-interface-ha.yml
 ```
 
+![](https://dsc.cloud/quickshare/vsrx-ha.png)
+
 ### Run security policy playbook
 
 *This playbook will:*
@@ -97,3 +99,6 @@ ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/set-interface-
 ```sh
 ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/set-security.yml
 ```
+
+#### Overview of security policy
+![](https://dsc.cloud/quickshare/security.png)
