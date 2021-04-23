@@ -3,6 +3,8 @@
 **/data-import/*
 **/ansible/playbook_vars/*
 **/ansible/config_backups/*
+**/config_backups/*
+
 **/ansible/inventory.ini
 # .tfstate files
 *.tfstate
