@@ -17,7 +17,7 @@
       junos_config:
         lines:    
           - set security ike policy IKE-POL mode main proposals IKE-PROP pre-shared-key ascii-text "{{ pre_shared_key }}"
-          - set security ike gateway IKE-GW ike-policy IKE-POL address 52.116.133.22 external-interface ae1.0
+          - set security ike gateway IKE-GW ike-policy IKE-POL address "{{ vpnaas_gateway_ip }}" external-interface ae1.0
     - name: Set up ipsec policies and proposal  
       junos_config:
         lines: 
