@@ -1,0 +1,45 @@
+---
+- hosts: all
+  vars_files:
+     - ../playbook_vars/deployment_vars.yml
+  gather_facts: no
+  tasks:
+    - name: Add VPC-NETWORK and subnet to the vSRX global address book 
+      junos_config:
+        lines:
+          - set security address-book global address VPC-NETWORK 10.240.0.0/24
+    - name: Set up tunnel interfaces and security zone 
+      junos_config:
+        lines:
+          - set interfaces st0 unit 1 family inet address 169.254.200.0/31
+          - set security zones security-zone VPN interfaces st0.1 host-inbound-traffic system-services all
+    - name: Set up ike policy and interface  
+      junos_config:
+        lines:    
+          - set security ike policy IKE-POL mode main proposals IKE-PROP pre-shared-key ascii-text "{{ pre_shared_key }}"
+          - set security ike gateway IKE-GW ike-policy IKE-POL address 52.116.133.22 external-interface ae1.0
+    - name: Set up ipsec policies and proposal  
+      junos_config:
+        lines: 
+          - set security ipsec policy IPSEC-POL perfect-forward-secrecy keys group5 
+          - set security ipsec policy IPSEC-POL proposals IPSEC-PROP
+          - set security ipsec vpn IPSEC-VPN vpn-monitor
+          - set security ipsec vpn IPSEC-VPN ike gateway IKE-GW ipsec-policy IPSEC-POL
+          - set security ipsec vpn IPSEC-VPN establish-tunnels immediately
+          - set security ipsec proposal IPSEC-PROP protocol esp authentication-algorithm hmac-sha1-96 encryption-algorithm aes-128-cbc lifetime-seconds 3600
+    - name: Set up CUSTOMER-PRIVATE to VPN zone security policies 
+      junos_config:
+        lines:
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN description "Allow all traffic from CUSTOMER-PRIVATE to VPN zone"
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match source-address any    
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match destination-address VPC-NETWORK
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match application any
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN then permit
+    - name: Set up VPN to CUSTOMER-PRIVATE zone security policies 
+      junos_config:
+        lines:
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN description "Allow all traffic from CUSTOMER-PRIVATE to VPN zone"
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match source-address VPC-NETWORK    
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match destination-address any
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match application any
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN then permit
