@@ -19,5 +19,5 @@ resource "local_file" "ansible_inventory_vars" {
       public_subnet_gateway  = "${cidrhost(var.public_subnet, 1)}/28"
     }
   )
-  filename = "${path.module}/playbook_vars/deployment_vars.yml"
+  filename = "${path.module}/vars/deployment_vars.yml"
 }

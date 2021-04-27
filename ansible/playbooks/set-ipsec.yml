@@ -15,23 +15,26 @@
           - set security zones security-zone VPN interfaces st0.1 host-inbound-traffic system-services all
     - name: Set up ike policy and interface  
       junos_config:
-        lines:    
-          - set security ike policy IKE-POL mode main proposals IKE-PROP pre-shared-key ascii-text "{{ pre_shared_key }}"
-          - set security ike gateway IKE-GW ike-policy IKE-POL address "{{ vpnaas_gateway_ip }}" external-interface ae1.0
+
     - name: Set up ipsec policies and proposal  
       junos_config:
         lines: 
-          - set security ipsec policy IPSEC-POL perfect-forward-secrecy keys group5 
-          - set security ipsec policy IPSEC-POL proposals IPSEC-PROP
-          - set security ipsec vpn IPSEC-VPN vpn-monitor
-          - set security ipsec vpn IPSEC-VPN ike gateway IKE-GW ipsec-policy IPSEC-POL
-          - set security ipsec vpn IPSEC-VPN establish-tunnels immediately
-          - set security ipsec proposal IPSEC-PROP protocol esp authentication-algorithm hmac-sha1-96 encryption-algorithm aes-128-cbc lifetime-seconds 3600
+          - set security ipsec traceoptions flag all
+          - set security ipsec proposal ipsec-prop protocol esp
+          - set security ipsec proposal ipsec-prop authentication-algorithm hmac-sha-256-128 
+          - set security ipsec proposal ipsec-prop encryption-algorithm aes-256-cbc 
+          - set security ipsec policy ipsec-pol proposals ipsec-prop
+          - set security ipsec vpn ipsec-vpn1 vpn-monitor
+          - set security ipsec vpn ipsec-vpn1 ike ipsec-policy ipsec-pol 
+          - set security ipsec vpn ipsec-vpn1 bind-interface st0.1
+          - set security ipsec vpn ipsec-vpn1 ike ipsec-policy ipsec-pol  
+          - set security ipsec vpn ipsec-vpn1 ike gateway gw-vpc
+          - set security ipsec vpn ipsec-vpn1 establish-tunnels immediately
     - name: Set up CUSTOMER-PRIVATE to VPN zone security policies 
       junos_config:
         lines:
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN description "Allow all traffic from CUSTOMER-PRIVATE to VPN zone"
-          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match source-address any    
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match source-address VSI-PRI-NET    
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match destination-address VPC-NETWORK
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match application any
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN then permit
@@ -40,6 +43,6 @@
         lines:
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN description "Allow all traffic from CUSTOMER-PRIVATE to VPN zone"
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match source-address VPC-NETWORK    
-          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match destination-address any
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match destination-address VSI-PRI-NET
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN match application any
           - set security policies from-zone CUSTOMER-PRIVATE to-zone VPN policy Custprivate-to-VPN then permit
