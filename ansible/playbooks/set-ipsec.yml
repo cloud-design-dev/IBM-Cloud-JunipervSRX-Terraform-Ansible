@@ -15,19 +15,7 @@
           - set security zones security-zone VPN interfaces st0.1 host-inbound-traffic system-services all
     - name: Set up ike policy and interface  
       junos_config:
-        lines:
-          - set security ike proposal ike-proposal authentication-method pre-shared-keys
-          - set security ike proposal ike-proposal dh-group group14
-          - set security ike proposal ike-proposal authentication-algorithm sha-256
-          - set security ike proposal ike-proposal encryption-algorithm aes-256-cbc
-          - set security ike policy ike-policy mode main
-          - set security ike policy ike-policy proposals ike-proposal
-          - set security ike policy ike-policy pre-shared-key ascii-text "{{ pre_shared_key }}"
-          - set security ike gateway gw-vpc external-interface ae1.0
-          - set security ike gateway gw-vpc ike-policy ike-policy
-          - set security ike gateway gw-vpc address 52.116.133.22
-          - set security ike gateway gw-vpc version v1-only
-          - set routing-options static route 0.0.0.0/0 next-hop st0.1
+
     - name: Set up ipsec policies and proposal  
       junos_config:
         lines: 
