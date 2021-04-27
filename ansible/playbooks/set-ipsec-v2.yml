@@ -1,0 +1,94 @@
+---
+- hosts: all
+  vars_files:
+     - ../playbook_vars/deployment_vars.yml
+  gather_facts: no
+  tasks:
+    - name: Add VPC-NETWORK and subnet to the vSRX global address book 
+      junos_config:
+        lines:
+          - set security address-book global address VPC-NETWORK "{{ vpc_cidr }}"
+    - name: Create interface for tunnel  
+      junos_config:
+        lines:
+          - set interfaces st0 unit 0 description "VPN interface for vSRX"
+          - set interfaces st0 unit 0 family inet address 169.254.200.0/31
+    - name: Set vpn routing  
+      junos_config:
+        lines:
+          - set routing-options static route "{{ vpc_cidr }}" next-hop st0.1
+    - name: Set security flow  
+      junos_config:
+        lines:
+          - set security flow tcp-mss ipsec-vpn mss 1200
+    - name: Set ike proposal 
+      junos_config:
+        lines:
+          - set security ike proposal ike-proposal authentication-method pre-shared-keys
+          - set security ike proposal ike-proposal dh-group group14 
+          - set security ike proposal ike-proposal authentication-algorithm sha-256 
+          - set security ike proposal ike-proposal encryption-algorithm aes-256-cbc 
+    - name: Set ike policy 
+      junos_config:
+        lines:
+          - set security ike policy ike-phase1-policy mode main
+          - set security ike policy ike-phase1-policy proposals ike-phase1-proposal
+          - set security ike policy ike-phase1-policy pre-shared-key ascii-text "{{ pre_shared_key }}"
+    - name: Set ike gateway 
+      junos_config:
+        lines:
+          - set security ike gateway vpnaas ike-policy ike-phase1-policy
+          - set security ike gateway vpnaas address "{{ vpnaas_gateway }}"
+          - set security ike gateway vpnaas external-interface ae1.0
+    - name: Set ipsec proposal 
+      junos_config:
+        lines:
+          - set security ipsec proposal ipsec-phase2-proposal protocol esp
+          - set security ipsec proposal ipsec-phase2-proposal authentication-algorithm hmac-sha-256
+          - set security ipsec proposal ipsec-phase2-proposal encryption-algorithm aes256-cbc
+    - name: Set ipsec policy 
+      junos_config:
+        lines:
+          - set security ipsec policy ipsec-phase2-policy perfect-forward-secrecy keys group2
+          - set security ipsec policy ipsec-phase2-policy proposals ipsec-phase2-proposal
+    - name: Set ipsec vpn interface and gateway  
+      junos_config:
+        lines:
+          - set security ipsec vpn ike-vpn-vpnaas bind-interface st0.0
+          - set security ipsec vpn ike-vpn-vpnaas ike gateway vpnaas
+          - set security ipsec vpn ike-vpn-vpnaas ike ipsec-policy ipsec-phase2-policy
+          - set security ipsec vpn ike-vpn-vpnaas establish-tunnels immediately
+    - name: Bind vpn zone to tunnel interface  
+      junos_config:
+        lines:
+          - set security zones security-zone vpn interfaces st0.0
+    - name: Set up trust to vpn zone security policies
+      junos_config:
+        lines:
+          - set security policies from-zone trust to-zone vpn policy 1 match source-address any
+          - set security policies from-zone trust to-zone vpn policy 1 match destination-address any
+          - set security policies from-zone trust to-zone vpn policy 1 match application any
+          - set security policies from-zone trust to-zone vpn policy 1 then permit
+    - name: Set up vpn to vpn trust security policies 
+      junos_config:
+        lines:
+          - set security policies from-zone vpn to-zone trust policy 1 match source-address any
+          - set security policies from-zone vpn to-zone trust policy 1 match destination-address any
+          - set security policies from-zone vpn to-zone trust policy 1 match application any
+          - set security policies from-zone vpn to-zone trust policy 1 then permit
+    - name: Set up CUSTOMER-PRIVATE to vpn zone security policies 
+      junos_config:
+        lines:
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 description "Allow all traffic from CUSTOMER-PRIVATE to VPN zone"
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 match source-address VSI-PRI-NET    
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 match destination-address VPC-NETWORK
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 match application any
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 then permit
+    - name: Set up vpn to CUSTOMER-PRIVATE zone security policies 
+      junos_config:
+        lines:
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 description "Allow all traffic from CUSTOMER-PRIVATE to VPN zone"
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 match source-address VPC-NETWORK    
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 match destination-address VSI-PRI-NET
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 match application any
+          - set security policies from-zone CUSTOMER-PRIVATE to-zone vpn policy 2 then permit
