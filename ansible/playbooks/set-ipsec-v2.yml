@@ -32,7 +32,7 @@
       junos_config:
         lines:
           - set security ike policy ike-phase1-policy mode main
-          - set security ike policy ike-phase1-policy proposals ike-phase1-proposal
+          - set security ike policy ike-phase1-policy proposals ike-proposal
           - set security ike policy ike-phase1-policy pre-shared-key ascii-text "{{ pre_shared_key }}"
     - name: Set ike gateway 
       junos_config:
@@ -44,8 +44,8 @@
       junos_config:
         lines:
           - set security ipsec proposal ipsec-phase2-proposal protocol esp
-          - set security ipsec proposal ipsec-phase2-proposal authentication-algorithm hmac-sha-256
-          - set security ipsec proposal ipsec-phase2-proposal encryption-algorithm aes256-cbc
+          - set security ipsec proposal ipsec-phase2-proposal authentication-algorithm hmac-sha-256-128
+          - set security ipsec proposal ipsec-phase2-proposal encryption-algorithm aes-256-cbc
     - name: Set ipsec policy 
       junos_config:
         lines:
