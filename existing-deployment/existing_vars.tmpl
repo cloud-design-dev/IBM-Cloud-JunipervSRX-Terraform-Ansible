@@ -1,0 +1,3 @@
+%{ for subnetIndex, subnet in private_subnets ~}
+${subnet.subnet}
+%{ endfor ~}

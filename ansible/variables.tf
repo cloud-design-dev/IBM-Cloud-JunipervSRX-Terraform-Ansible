@@ -4,3 +4,5 @@ variable "private_vlan" {}
 variable "private_subnet" {}
 variable "public_subnet" {}
 variable "hostname" {}
+variable "private_subnets" {}
+variable "public_subnets" {}

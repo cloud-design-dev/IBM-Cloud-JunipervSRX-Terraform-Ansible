@@ -8,8 +8,8 @@ resource "local_file" "ansible-inventory" {
   filename = "${path.module}/inventory.ini"
 }
 
-resource "local_file" "ansible_inventory_vars" {
-  content = templatefile("${path.module}/templates/deployment_vars.tmpl",
+resource "local_file" "new_gateway_vars" {
+  content = templatefile("${path.module}/templates/new_vars.tmpl",
     {
       public_vlan            = var.public_vlan
       private_vlan           = var.private_vlan
@@ -19,5 +19,6 @@ resource "local_file" "ansible_inventory_vars" {
       public_subnet_gateway  = "${cidrhost(var.public_subnet, 1)}/28"
     }
   )
-  filename = "${path.module}/vars/deployment_vars.yml"
+  filename = "${path.module}/vars/new_vars.yml"
 }
+
