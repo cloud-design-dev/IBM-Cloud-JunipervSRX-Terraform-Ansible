@@ -33,4 +33,4 @@
         backup: yes
         backup_options:
           dir_path: '../config_backups'
-          filename: standalone-config.backup
+          filename: standalone-config-interfaces.backup

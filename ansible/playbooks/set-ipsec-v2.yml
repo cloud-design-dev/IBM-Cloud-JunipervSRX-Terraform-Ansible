@@ -42,7 +42,7 @@
           - set security ike gateway vpnaas address "{{ vpnaas_gateway }}"
           - set security ike gateway vpnaas dead-peer-detection interval 10
           - set security ike gateway vpnaas dead-peer-detection threshold 5
-          - set security ike gateway vpnaas local-identity inet 169.46.77.166
+          - set security ike gateway vpnaas local-identity inet "{{ vsrx_public_ip }}"
           - set security ike gateway vpnaas external-interface ae1.0
           - set security ike gateway vpnaas general-ikeid
           - set security ike gateway vpnaas version v2-only
@@ -99,3 +99,16 @@
           - set security policies from-zone vpn to-zone CUSTOMER-PRIVATE policy 2 match destination-address VSI-PRI-NET
           - set security policies from-zone vpn to-zone CUSTOMER-PRIVATE policy 2 match application any
           - set security policies from-zone vpn to-zone CUSTOMER-PRIVATE policy 2 then permit
+    - name: Add VPN ports to firewall
+      junos_config:
+        lines:
+          - set firewall filter PROTECT-IN term VPCVPN from destination-address "{{ vsrx_public_ip }}"/32
+          - set firewall filter PROTECT-IN term VPCVPN from destination-address "{{ vsrx_private_ip }}"/32
+          - set firewall filter PROTECT-IN term VPCVPN from protocol udp
+          - set firewall filter PROTECT-IN term VPCVPN from port 500
+          - set firewall filter PROTECT-IN term VPCVPN from port 4500
+          - set firewall filter PROTECT-IN term VPCVPN then accept
+        backup: yes
+        backup_options:
+          dir_path: '../config_backups'
+          filename: standalone-config-ipsec.backup

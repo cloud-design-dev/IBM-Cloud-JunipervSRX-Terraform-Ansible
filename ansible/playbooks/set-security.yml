@@ -31,3 +31,6 @@
           - set security policies from-zone CUSTOMER-PUBLIC to-zone SL-PUBLIC policy ALLOW_OUTBOUND then permit
         comment: update config
         backup: yes
+        backup_options:
+          dir_path: '../config_backups'
+          filename: standalone-config-policies.backup
