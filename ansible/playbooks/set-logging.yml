@@ -2,6 +2,7 @@
 - hosts: all
   vars:
     ansible_command_timeout: 120
+    syslog_server_ip: "SYSLOG_IP"
   gather_facts: no
   tasks:
     - name: Add a syslog server to vSRX system 

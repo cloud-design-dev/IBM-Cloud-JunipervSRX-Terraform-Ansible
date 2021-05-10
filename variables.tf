@@ -1,3 +1,15 @@
+variable "iaas_classic_api_key" {
+  type        = string
+  description = "Classic Infrastructure (SoftLayer) API Key."
+  default     = ""
+} 
+
+variable "iaas_classic_username" {
+  type        = string
+  description = "Classic Infrastructure (SoftLayer) Usernmae."
+  default     = ""
+} 
+
 variable "vsrx_public_ip" {
   type        = string
   description = "The Public IP of the vSRX gateway appliance. This is used for the ansible inventory file as well as the VPN playbook."
