@@ -4,17 +4,17 @@
     ansible_command_timeout: 120
   gather_facts: no
   tasks:
-    - name: Allow all traffic within CUSTOMER_PUBLIC zone 
+    - name: Add a syslog server to vSRX system 
       junos_config:
         lines:
           - set system syslog user * any emergency
-          - set system syslog host 10.87.129.16 any any
-          - set system syslog host 10.87.129.16 match RT_FLOW_SESSION
+          - set system syslog host "{{ syslog_server_ip }}" any any
+          - set system syslog host "{{ syslog_server_ip }}" match RT_FLOW_SESSION
           - set system syslog file messages any any
           - set system syslog file messages authorization info
           - set system syslog file interactive-commands interactive-commands any
           - set security log mode stream
-          - set security log source-address 172.168.0.3
+          - set security log source-address "{{ vsrx_private_ip }}"
           - set security log stream S1 format syslog
           - set security log stream S1 category all
-          - set security log stream S1 host 10.87.129.16
+          - set security log stream S1 host "{{ syslog_server_ip }}"

@@ -1,5 +1,0 @@
-iaas_classic_username = ""
-iaas_classic_api_key  = ""
-hostname              = ""
-public_vlan_name      = ""
-private_vlan_name     = ""

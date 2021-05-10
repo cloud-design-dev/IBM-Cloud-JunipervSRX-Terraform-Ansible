@@ -1,9 +1,12 @@
 # Overview
 This Repository code for for using Terraform and Ansible to deploy and configure a [Juniper vSRX](https://cloud.ibm.com/docs/vsrx?topic=vsrx-about-ibm-cloud-juniper-vsrx)  network gateway on the IBM Cloud. 
 
+
+
+
 ## Terraform
- - [Standalone 1G/10G vSRX](standalone/) : This deploys a single vSRX instances with 1G or 10G network interfaces.
- - [HA-Pair 1G/10G vSRX](ha-pair/) : This deploys 2 vSRX instances with 1G or 10G interfaces and sets them up in an HA Pair.
+ - [Standalone 1G/10G vSRX](infrastructure/standalone/) : This deploys a single vSRX instances with 1G or 10G network interfaces.
+ - [HA-Pair 1G/10G vSRX]infrastructure/(ha-pair/) : This deploys 2 vSRX instances with 1G or 10G interfaces and sets them up in an HA Pair.
 
 ## Ansible
  - `set-interfaces-*.yml` : This will create the networking interfaces within the vSRX for the associated VLANs/subnets. There are unique playbooks for the `standalone` and `ha` deployments. 

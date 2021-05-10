@@ -4,7 +4,7 @@
     ansible_command_timeout: 120
   gather_facts: no
   tasks:
-    - name: Allow all traffic within CUSTOMER_PUBLIC zone 
+    - name: Allow all traffic from CUSTOMER-PUBLIC to CUSTOMER-PUBLIC zone 
       junos_config:
         lines:
           - set security policies from-zone CUSTOMER-PUBLIC to-zone CUSTOMER-PUBLIC policy ALLOW_INTERNAL description "Allow all traffic within CUSTOMER_PUBLIC zone"
@@ -12,7 +12,7 @@
           - set security policies from-zone CUSTOMER-PUBLIC to-zone CUSTOMER-PUBLIC policy ALLOW_INTERNAL match destination-address any
           - set security policies from-zone CUSTOMER-PUBLIC to-zone CUSTOMER-PUBLIC policy ALLOW_INTERNAL match application any
           - set security policies from-zone CUSTOMER-PUBLIC to-zone CUSTOMER-PUBLIC policy ALLOW_INTERNAL then permit
-    - name: Allow ping and SSH from the internet to the public subnet 
+    - name: Allow ping and SSH from the internet to CUSTOMER-PUBLIC 
       junos_config:
         lines:
           - set security policies from-zone SL-PUBLIC to-zone CUSTOMER-PUBLIC policy ALLOW_PING_SSH description "Allow ping and SSH from the internet to the public subnet"
