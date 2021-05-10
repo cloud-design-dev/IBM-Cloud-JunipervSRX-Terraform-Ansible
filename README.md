@@ -52,7 +52,7 @@ ansible-playbook -i ansible/inventory ansible/playbooks/set-logging.yml
 ## Run Ansible playbook to configure an IPsec tunnel to a VPC VPN Gateway server
 This will create an IPsec tunnel on the vSRX with a remote Peer in IBM Cloud VPC. It will create the tunnel interface and appropriate IPsec/IKE/security policies.
 
-**Note**: IBM Cloud VPN VPN requires a custom IPsec policy as outlined [here](). Please make sure the VPN connection you create uses this custom IPsec policy. 
+**Note**: By default, VPN for VPC disables PFS in Phase 2, and Juniper vSRX requires PFS to be enabled in Phase 2. Therefore, you must create a custom IPsec policy to replace the default policy for the VPN as outlined [here](https://cloud.ibm.com/docs/vpc?topic=vpc-juniper-vsrx-config#custom-ipsec-policy-with-vsrx). 
 
 ```sh
 ansible-playbook -i ansible/inventory ansible/playbooks/set-logging.yml
