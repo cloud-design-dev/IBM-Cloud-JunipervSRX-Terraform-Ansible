@@ -66,4 +66,4 @@ run show security ipsec security-associations
 ```
 
 ## Need to deploy a Juniper Network Gateway? 
-If you do not already have a vSRX deployed I have provided some Terraform examples for both a [standalone](infrastructure/standalone) and [HA](infrastructure/ha-pair) vSRX deployment.
+If you do not already have a vSRX deployed I have provided some Terraform examples for both a [standalone](infrastructure/standalone) and [HA](infrastructure/ha-pair) vSRX deployment. These examples will also create the Ansible inventory and playbook variables file needed to run the provided playbooks. 
