@@ -1,5 +1,5 @@
 # Overview
-This Repository code for for using Terraform and Ansible to deploy and configure a [Juniper vSRX](https://cloud.ibm.com/docs/vsrx?topic=vsrx-about-ibm-cloud-juniper-vsrx)  network gateway on the IBM Cloud. 
+Using Terraform and Ansible to deploy and configure a [Juniper vSRX](https://cloud.ibm.com/docs/vsrx?topic=vsrx-about-ibm-cloud-juniper-vsrx)  network gateway on the IBM Cloud. 
 
 ## Prerequisites
  - [terraform](https://www.terraform.io/downloads.html) installed.
