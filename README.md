@@ -6,7 +6,7 @@ This Repository code for for using Terraform and Ansible to deploy and configure
  - [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed.
  - An [IBM Cloud Infrastructure Username and API Key](https://cloud.ibm.com/docs/account?topic=account-classic_keys).
 
-## Deploy all resources
+## Create Ansible inventory file and playbook variables with Terraform
 1. Clone repository:
     ```sh
     git clone https://github.com/cloud-design-dev/IBM-Cloud-JunipervSRX-Terraform-Ansible.git
@@ -24,7 +24,8 @@ This Repository code for for using Terraform and Ansible to deploy and configure
    terraform apply default.tfplan
    ```
 
-After the plan completes we will move on to configuring the gateway using Ansible. 
+After the plan completes you should have 2 new files: An Ansible inventory file (`./ansible/inventory.ini`) and a playbook variables file (`./ansible/playbook/vars.yml`). You can now move on to running a playbook.
+
 
 ## Run Ansible playbook to create the Public and Private interfaces
 For a standalone gateway appliance use the `set-interface-standalone.yml` playbook. For an HA pair use the `set-interface-ha.yml` playbook. This will create the networking interfaces within the vSRX for the associated VLANs/subnets.
