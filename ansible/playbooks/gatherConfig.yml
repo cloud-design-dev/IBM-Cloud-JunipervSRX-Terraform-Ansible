@@ -1,0 +1,18 @@
+---
+- name: Manipulate the configuration of Junos devices
+  hosts: vsrx
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+    - name: Retrieve the committed configuration
+      juniper_junos_config:
+        retrieve: 'committed'
+        diff: false
+        check: false
+        commit: false
+      register: response
+    - name: Print the lines in the config.
+      debug:
+        var: response.config_lines
