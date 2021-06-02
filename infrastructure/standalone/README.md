@@ -1,8 +1,15 @@
 # Overview
 This guide will show you how to use Terraform and Ansible to deploy and configure a [Juniper vSRX](https://cloud.ibm.com/docs/vsrx?topic=vsrx-about-ibm-cloud-juniper-vsrx) network gateway on the IBM Cloud. This code allows two deployment types:
 
- - oneGconfig: This deploys a vSRX with a 1G network interface
- - tenGconfig: This deploys a vSRX with a 10G network interface
+ - Deploy new VLANs to associate with the vSRX
+ - Use existing VLANs to associate with the vSRX
+
+By default the vSRX will be deployed with 1G network interfaces. If you would like to deploy a 10G vSRX see the description for the following variables in `variables.tf`. I have provided the 10G equivalent  for each variable:
+
+ - os_package
+ - os_version
+ - process_key
+ - network_speed
 
 ## Deploy all resources
 
@@ -10,7 +17,7 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
    ```sh
    cp terraform.tfvars.example terraform.tfvars
    ```
-1. Edit `terraform.tfvars` to match your environment.
+1. Edit `terraform.tfvars` to match your environment. If you would like Terraform to create your VLANs leave `existing_public_vlan` and `existing_private_vlan` as empty strings. To use existing VLANs provide the corresponding VLAN names for those variables. 
 
    | Name | Description | Required |
    | ---- | ----------- | ---|
@@ -20,12 +27,8 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
    | ssh_key | Name of an existing SSH key to inject in to the vSRX | N |
    | hostname | Hostname for the vSRX Cluster | N | 
    | domain | Domain name for the vSRX Cluster | N | 
-1. Update `main.tf` for your environment:
-   ```sh
-   | Environment | network_speed | package_key_name | process_key_name | os_key_name | 
-   | ---- | ----------- | ---| ---| ---|
-   | oneGconfig | local.oneGconfig.network_speed | local.oneGconfig.package | local.oneGconfig.process_key | local.oneGconfig.os_version |
-   | tenGconfig | local.tenGconfig.network_speed | local.tenGconfig.package | local.tenGconfig.process_key | local.tenGconfig.os_version |
+   | existing_public_vlan | Existing Public Vlan name to associate with vSRX| N |
+   | existing_private_vlan | Existing Private Vlan name to associate with vSRX| N | 
    ```
 1. Plan deployment:
    ```sh
@@ -67,3 +70,39 @@ This guide will show you how to use Terraform and Ansible to deploy and configur
 | associated\_vlans | A nested block describing the associated VLANs for the member of the network gateway |
 
 [Full List of Network Gateway Outputs](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/network_gateway#attribute-reference)
+
+
+## Configure Gateways via Ansible
+
+### Install the Junos Ansible Collection
+This [collection](https://galaxy.ansible.com/junipernetworks/junos) provides ansible modules for interacting with Junos. 
+
+```sh 
+ansible-galaxy collection install junipernetworks.junos
+```
+### Run interface configuration playbook
+
+*This playbook will:*
+ - Assign associated VLANs and subnet to CUSTOMER-PUBLIC and CUSTOMER-PRIVATE interfaces
+ - Create security zone for CUSTOMER-PUBLIC and CUSTOMER-PRIVATE traffic that allows all system services traffic 
+ - Add the CUSTOMER-PUBLIC and CUSTOMER-PRIVATE subnets to the vSRX global address book
+
+```sh
+ansible-playbook -i ../../ansible/inventory.ini ../../ansible/playbooks/set-interface-ha.yml
+```
+
+![](https://dsc.cloud/quickshare/vsrx-ha.png)
+
+### Run security policy playbook
+
+*This playbook will:*
+ - Allow all traffic within CUSTOMER_PUBLIC zone
+ - Allow ping and SSH from the internet to the public subnet
+ - Allow all outbound traffic from CUSTOMER-PUBLIC to the internet
+
+```sh
+ansible-playbook -i ../../ansible/inventory.ini ../../ansible/playbooks/set-security.yml
+```
+
+#### Overview of security policy
+![](https://dsc.cloud/quickshare/security.png)

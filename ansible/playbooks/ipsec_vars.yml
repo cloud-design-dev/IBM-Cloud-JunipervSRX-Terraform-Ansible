@@ -1,0 +1,3 @@
+vpc_cidr: "${vpc_cidr}"
+pre_shared_key: "${pre_shared_key}"
+vpc_vpn_gateway_ip: "${vpc_vpn_gateway_ip}"

@@ -1,7 +1,7 @@
 ---
 - hosts: all
   vars_files:
-     - ./vars.yml
+     - ./ipsec_vars.yml
   gather_facts: no
   tasks:
     - name: Add VPC-NETWORK and subnet to the vSRX global address book 
