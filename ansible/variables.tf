@@ -4,3 +4,8 @@ variable "public_subnet" {}
 variable "public_vlan" {}
 variable "private_vlan" {}
 variable "vsrx_public_ip" {}
+variable "private_subnet_gateway" {}
+variable "public_subnet_gateway" {}
+variable "pre_shared_key" {}
+variable "vpc_cidr" {}
+variable "vpc_vpn_gateway_ip" {}

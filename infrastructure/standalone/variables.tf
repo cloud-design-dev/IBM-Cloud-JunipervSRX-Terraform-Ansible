@@ -81,3 +81,21 @@ variable "network_speed" {
   description = "Default Gateway Appliance network speed. For 10G network devices use `10000`."
   default     = "1000"
 }
+
+variable "vpc_cidr" {
+  type        = string
+  description = "(Optional) The VPC subnet that you would like to add to the vSRX address book. This is used when creating security policies. Only needed if you will be running the Ipsec playbook."
+  default     = ""
+}
+
+variable "pre_shared_key" {
+  type        = string
+  description = "(Optional) The Preshared Key for the Ipsec tunnel. Only needed if you will be running the Ipsec playbook."
+  default     = ""
+}
+
+variable "vpc_vpn_gateway_ip" {
+  type        = string
+  description = "(Optional) The VPC VPN Peer address for the Ipsec tunnel. Only needed if you will be running the Ipsec playbook."
+  default     = ""
+}

@@ -48,18 +48,18 @@ variable "private_subnet" {
 
 variable "vpc_cidr" {
   type        = string
-  description = "The VPC subnet that you would like to add to the vSRX address book. This is used when creating security policies."
+  description = "(Optional) The VPC subnet that you would like to add to the vSRX address book. This is used when creating security policies. Only needed if you will be running the Ipsec playbook."
   default     = ""
 }
 
 variable "pre_shared_key" {
   type        = string
-  description = "The Preshared Key for the Ipsec tunnel."
+  description = "(Optional) The Preshared Key for the Ipsec tunnel. Only needed if you will be running the Ipsec playbook."
   default     = ""
 }
 
 variable "vpc_vpn_gateway_ip" {
   type        = string
-  description = "The VPC VPN Peer address for the Ipsec tunnel."
+  description = "(Optional) The VPC VPN Peer address for the Ipsec tunnel. Only needed if you will be running the Ipsec playbook."
   default     = ""
 }

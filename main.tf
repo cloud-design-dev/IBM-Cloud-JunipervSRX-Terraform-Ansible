@@ -1,3 +1,9 @@
+locals {
+  vpc_cidr            = var.vpc_cidr != "" ? var.vpc_cidr : null 
+  pre_shared_key         = var.pre_shared_key != "" ? var.pre_shared_key : null 
+  vpc_vpn_gateway_ip = var.vpc_vpn_gateway_ip != "" ? var.vpc_vpn_gateway_ip : null 
+}
+
 resource "local_file" "ansible-inventory" {
   content = templatefile("${path.module}/ansible/templates/inventory.tmpl",
     {
@@ -16,9 +22,9 @@ resource "local_file" "gateway_vars" {
       public_subnet          = data.ibm_network_vlan.public.subnets[0].subnet
       private_subnet_gateway = "${cidrhost(data.ibm_network_vlan.private.subnets[0].subnet, 1)}/${data.ibm_network_vlan.private.subnets[0].cidr}"
       public_subnet_gateway  = "${cidrhost(data.ibm_network_vlan.public.subnets[0].subnet, 1)}/${data.ibm_network_vlan.public.subnets[0].cidr}"
-      vpc_cidr               = var.vpc_cidr
-      pre_shared_key         = var.pre_shared_key
-      vpc_vpn_gateway_ip     = var.vpc_vpn_gateway_ip
+      vpc_cidr               = local.vpc_cidr
+      pre_shared_key         = local.pre_shared_key
+      vpc_vpn_gateway_ip     = local.vpc_vpn_gateway_ip
       vsrx_public_ip         = var.vsrx_public_ip
       vsrx_private_ip        = var.vsrx_private_ip
 
