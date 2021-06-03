@@ -1,25 +1,25 @@
-resource tls_private_key ssh {
+resource "tls_private_key" "ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-resource ibm_compute_ssh_key generated_key {
+resource "ibm_compute_ssh_key" "generated_key" {
   label      = "vsrx-ansible-deploy-key"
   notes      = "test_ssh_key_notes"
   public_key = tls_private_key.ssh.public_key_openssh
 }
 
 locals {
-  hostname              = var.hostname != "" ? var.hostname : "vsrx"
-  domain                = var.domain != "" ? var.domain : "example.com"
-  vpc_cidr              = var.vpc_cidr != "" ? var.vpc_cidr : null
-  pre_shared_key        = var.pre_shared_key != "" ? var.pre_shared_key : null
-  vpc_vpn_gateway_ip    = var.vpc_vpn_gateway_ip != "" ? var.vpc_vpn_gateway_ip : null
-  public_vlan           = var.existing_public_vlan != "" ? data.ibm_network_vlan.public.0.id : ibm_network_vlan.vsrx_public.0.id
-  public_vlan_number    = var.existing_public_vlan != "" ? data.ibm_network_vlan.public.0.number : ibm_network_vlan.vsrx_public.0.vlan_number
-  public_subnet_gateway = var.existing_public_vlan != "" ? cidrhost(data.ibm_network_vlan.public.0.subnets.0.subnet, 1) / data.ibm_network_vlan.public.0.subnets.0.cidr : cidrhost(ibm_network_vlan.vsrx_public.0.subnets.0.subnet, 1) / ibm_network_vlan.vsrx_public.0.subnets.0.cidr
-  private_vlan          = var.existing_private_vlan != "" ? data.ibm_network_vlan.private.0.id : ibm_network_vlan.vsrx_private.0.id
-  private_vlan_number   = var.existing_private_vlan != "" ? data.ibm_network_vlan.private.0.number : ibm_network_vlan.vsrx_private.0.vlan_number
+  hostname           = var.hostname != "" ? var.hostname : "vsrx"
+  domain             = var.domain != "" ? var.domain : "example.com"
+  vpc_cidr           = var.vpc_cidr != "" ? var.vpc_cidr : null
+  pre_shared_key     = var.pre_shared_key != "" ? var.pre_shared_key : null
+  vpc_vpn_gateway_ip = var.vpc_vpn_gateway_ip != "" ? var.vpc_vpn_gateway_ip : null
+  public_vlan        = var.existing_public_vlan != "" ? data.ibm_network_vlan.public.0.id : ibm_network_vlan.vsrx_public.0.id
+  public_vlan_number = var.existing_public_vlan != "" ? data.ibm_network_vlan.public.0.number : ibm_network_vlan.vsrx_public.0.vlan_number
+  # public_subnet_gateway = var.existing_public_vlan != "" ? cidrhost(data.ibm_network_vlan.public.0.subnets.0.subnet, 1) / data.ibm_network_vlan.public.0.subnets.0.cidr : cidrhost(ibm_network_vlan.vsrx_public.0.subnets.0.subnet, 1) / ibm_network_vlan.vsrx_public.0.subnets.0.cidr
+  private_vlan        = var.existing_private_vlan != "" ? data.ibm_network_vlan.private.0.id : ibm_network_vlan.vsrx_private.0.id
+  private_vlan_number = var.existing_private_vlan != "" ? data.ibm_network_vlan.private.0.number : ibm_network_vlan.vsrx_private.0.vlan_number
   #private_subnet_gateway = var.existing_private_vlan != "" ? cidrhost(data.ibm_network_vlan.private[0].subnets[0].subnet, 1) / data.ibm_network_vlan.private[0].subnets[0].cidr : cidrhost(ibm_network_vlan.vsrx_private[0].subnets[0].subnet, 1) / ibm_network_vlan.vsrx_private[0].subnets[0].cidr
   ssh_key_ids = var.ssh_key != "" ? [data.ibm_compute_ssh_key.deploymentKey[0].id, ibm_compute_ssh_key.generated_key.id] : [ibm_compute_ssh_key.generated_key.id]
 }
@@ -88,12 +88,13 @@ module "ansible" {
   source                 = "../../ansible"
   hostname               = local.hostname
   public_subnet          = ibm_compute_vm_instance.node.public_subnet
-  public_subnet_gateway  = local.public_subnet_gateway
+  public_subnet_gateway  = "169.57.5.65/28"
   public_vlan            = local.public_vlan_number
   private_subnet         = ibm_compute_vm_instance.node.private_subnet
-  private_subnet_gateway = local.private_subnet_gateway
+  private_subnet_gateway = "10.130.39.193/26"
   private_vlan           = local.private_vlan_number
   vsrx_public_ip         = ibm_network_gateway.gateway.public_ipv4_address
+  vsrx_private_ip        = ibm_network_gateway.gateway.private_ipv4_address
   vpc_cidr               = local.vpc_cidr
   pre_shared_key         = local.pre_shared_key
   vpc_vpn_gateway_ip     = local.vpc_vpn_gateway_ip

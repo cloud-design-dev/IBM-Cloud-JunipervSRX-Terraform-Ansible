@@ -9,3 +9,4 @@ variable "public_subnet_gateway" {}
 variable "pre_shared_key" {}
 variable "vpc_cidr" {}
 variable "vpc_vpn_gateway_ip" {}
+variable "vsrx_private_ip" {}

@@ -1,12 +1,11 @@
 # Local .terraform directories
 **/.terraform/*
 **/data-import/*
-**/ansible/playbooks/vars.yml
-**/ansible/config_backups/*
+ansible/playbooks/vars.yml
+**/infrastructure/config_backups/*
 **/config_backups/*
 
 **/ansible/inventory.ini
-**/ansible/inventory
 
 # .tfstate files
 *.tfstate

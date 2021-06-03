@@ -17,6 +17,8 @@ resource "local_file" "playbook_vars" {
       public_subnet          = var.public_subnet
       private_subnet_gateway = var.private_subnet_gateway
       public_subnet_gateway  = var.public_subnet_gateway
+      vsrx_public_ip         = var.vsrx_public_ip
+      vsrx_private_ip        = var.vsrx_private_ip
     }
   )
   filename = "${path.module}/playbooks/vars.yml"
